@@ -7,7 +7,7 @@
 #include<fstream>
 #include<string>
 #include<algorithm>
-
+#include "stat.h"
 /**
 
 implements basic naive base classification agorithm
@@ -110,11 +110,16 @@ arma::mat fill_complement(arma::mat A, arma::mat B, std::vector<int> v, int r , 
 	return B;
 }
 
+std::map<int,std::vector<arma::vec> > separateByClass(arma::mat A){
+	
+}
+
 int main(int argc, char *argv[]){
 	arma::mat feature_mat = read_csv("pima-indians-diabetes.data.txt");
 	int data_p = feature_mat.n_rows;
 	int dim = feature_mat.n_cols;
-	int train_size = (int)(data_p*0.67);
+	float split_ratio = 0.67;
+	int train_size = (int)(data_p*split_ratio);
 	arma::mat train(train_size,dim);
 	arma::mat test(data_p-train_size,dim);
 	std::vector<int> vec;
