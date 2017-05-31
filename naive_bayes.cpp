@@ -3,6 +3,7 @@
 #include<iostream>
 #include<vector>
 #include<math.h>
+#include<map>
 #include<fstream>
 #include<string>
 #include<algorithm>
@@ -31,7 +32,7 @@ arma::mat read_csv(std::string fname){
 	std::ifstream in;
 	std::vector<double> con;
 	std::vector<std::vector<double> > feat;
-	in.open(fname);
+	in.open(fname.c_str());
 	char line[1000];
 	while(in >> line){
 		con = split(line,con);
@@ -88,8 +89,6 @@ void find_vec(std::vector<int> &vec, int t_s, int r){
 }
 
 arma::mat fill(arma::mat A, arma::mat B, std::vector<int> v, int c){
-	std::cout << A.n_rows << " , " << A.n_cols << std::endl;
-	std::cout << B.n_rows << " , " << B.n_cols << std::endl;
 	std::vector<int>::iterator it;
 	int r;
 	int te_c = 0;
@@ -131,6 +130,33 @@ std::map<int,arma::vec> ClassSummaryMean(std::map<int,int> c_l, arma::mat A){
 	int c = A.n_cols;
 	std::map<int,arma::vec> M;
 	std::map<int,int>::iterator it;
+	arma::mat B;
+	arma::vec V;
+	for(it=c_l.begin();it!=c_l.end();it++){
+		a = it->first;
+		b = it->second;
+		B.set_size(b,c-1);
+		V.set_size(c-1);
+		cnt = 0;
+		for(int i=0;i<r;i++){
+			if(A(i,c-1)==a){
+				for(int j=0;j<c-1;j++)
+					B(cnt,j) = A(i,j);
+				cnt++;
+			}
+		}	
+		V = mean(B);
+		M[a] = V; 
+	}
+	return M;
+}
+
+std::map<int,arma::vec> ClassSummaryStd(std::map<int,int> c_l, arma::mat A){
+	int a,b,cnt;
+	int r = A.n_rows;
+	int c = A.n_cols;
+	std::map<int,arma::vec> M;
+	std::map<int,int>::iterator it;
 	for(it=c_l.begin();it!=c_l.end();it++){
 		a = it->first;
 		b = it->second;
@@ -150,32 +176,7 @@ std::map<int,arma::vec> ClassSummaryMean(std::map<int,int> c_l, arma::mat A){
 	return M;
 }
 
-std::map<int,arma::vec> ClassSummaryStd(std::vector<int> c_l, arma::mat A){
-	int a,b,cnt;
-	int r = A.n_rows;
-	int c = A.n_cols;
-	std::map<int,arma::vec> M;
-	std::map<int,int>::iterator it;
-	for(it=c_l.begin();it!=c_l.end();it++){
-		a = (*it)->first;
-		b = (*it)->second;
-		arma::mat B(b,c-1);
-		arma::vec V(b);
-		cnt = 0;
-		for(int i=0;i<r;i++){
-			if(A(i,c-1)==a){
-				for(int j=0;j<c-1;j++)
-					B(cnt,j) = A(i,j);
-				cnt++;
-			}
-		}
-		V = std_dev(B);
-		M[a] = V; 
-	}
-	return M;
-}
-
-double CalculateProbabilty(double m,double s,double x){
+double CalculateProbability(double m,double s,double x){
 	double prob = 1.0/(s*sqrt(2*3.14));
 	double a = pow(x-m,2);
 	a/=2*s*s;
@@ -183,17 +184,17 @@ double CalculateProbabilty(double m,double s,double x){
 	return prob;
 }
 
-std::map<int,double> FindClassProbability(std::map<int,arma::vec> M, std::map<int,arma::vec> S,std::vec B,std::map<int,double> cl_prior){
+std::map<int,double> FindClassProbability(std::map<int,arma::vec> M, std::map<int,arma::vec> S,arma::vec B,std::map<int,double> cl_prior){
 	std::map<int,double> class_prob;
 	std::vector<int> C_l;
 	int c = B.n_cols;
 	std::map<int,arma::vec>::iterator it;
 	for(it=M.begin();it!=M.end();it++)
-		C_l.append((*it)->first);
+		C_l.push_back(it->first);
 
 	for(int i=0;i<(int)(C_l.size());i++){
 		double m,s,x,prob=1.0;
-		for(j=0;j<c;j++){
+		for(int j=0;j<c;j++){
 			m = M[C_l[i]](j);
 			s = S[C_l[i]](j);
 			x = B(j);
@@ -209,13 +210,13 @@ std::map<int,double> CalculatePrior(std::map<int,int> A){
 	std::map<int,int>::iterator it;
 	double a,b,sum=0.0;
 	for(it=A.begin();it!=A.end();it++){
-		a = (*it)->first;
-		b = (*it)->second;
+		a = it->first;
+		b = it->second;
 		B[a] = (double)(b);
 		sum+=(double)(b);
 	}
 	for(it=A.begin();it!=A.end();it++){
-		a = (*it)->first;
+		a = it->first;
 		B[a] /= sum; 
 	}
 	return B;
@@ -226,9 +227,9 @@ int FindMax(std::map<int,double> A){
 	double p = 0.0;
 	std::map<int,double>::iterator it;
 	for(it=A.begin();it!=A.end();it++){
-		if ((*it)->second > p){
-			p = (*it)->second;
-			c_l = (*it)->first;
+		if (it->second > p){
+			p = it->second;
+			c_l = it->first;
 		}	
 	}
 	return c_l;
@@ -253,12 +254,13 @@ double CalculateAccuracy(arma::mat Test, std::map<int,arma::vec> M, std::map<int
 	return accr/x;
 }
 
+
 int main(int argc, char *argv[]){
 	arma::mat feature_mat = read_csv("pima-indians-diabetes.data.txt");
 	int data_p = feature_mat.n_rows;
 	double accr;
 	int dim = feature_mat.n_cols;
-	float split_ratio = 0.67;
+	float split_ratio = 0.6;
 	int train_size = (int)(data_p*split_ratio);
 	arma::mat train(train_size,dim);
 	arma::mat test(data_p-train_size,dim);
@@ -268,17 +270,14 @@ int main(int argc, char *argv[]){
 	std::map<int,arma::vec> M_n_train;
 	std::map<int,arma::vec> S_d_train;
 	find_vec(vec,train_size,data_p);
-	std::cout << vec.size() << std::endl;
 	train = fill(feature_mat,train,vec,dim);
-	std::cout << "obtained training matrix" << std::endl;
 	test = fill_complement(feature_mat,test,vec,data_p,dim);
-	std::cout << "obtined test matrix" << std::endl;
-	c_l = FindClass(test);
+	c_l = FindClass(train);
 	M_n_train = ClassSummaryMean(c_l,train);
 	S_d_train = ClassSummaryStd(c_l,train);
 	cl_prior = CalculatePrior(c_l);
-	accr = CalculateAccuracy(test,M_n,S_d,cl_prior);
-	std::cout << "accuracy: " << accr;
+	accr = CalculateAccuracy(test,M_n_train,S_d_train,cl_prior);
+	std::cout << "accuracy: " << accr << std::endl;
 	return 0;
 }
 
