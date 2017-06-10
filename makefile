@@ -1,11 +1,13 @@
 CC = g++
-objects = stat.o 
+objects = stat.o common.o 
 
 naive_bayes : $(objects)
-		 $(CC) -o naive_bayes naive_bayes.cpp $(objects)
-
+		 $(CC) neural_network.cpp -o neural_net $(objects) -O1 -larmadillo 
 stat.o : stat.h stat.cpp 
-	$(CC) -c stat.cpp 
+	$(CC) -c stat.cpp
+
+common.o : common.h common.cpp
+	$(CC) -c common.cpp 
 		 
 clean : 
 	rm $(objects) 
