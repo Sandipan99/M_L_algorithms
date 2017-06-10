@@ -3,7 +3,6 @@
 #include<iostream>
 #include<vector>
 #include<math.h>
-#include<map>
 #include<fstream>
 #include<string>
 #include<algorithm>
@@ -19,6 +18,9 @@ output: accuracy
 **/
 arma::mat calculate(arma::mat X, arma::mat W, arma::vec b){
 	arma::mat z = X * W;
+	std::cout<<X.n_rows<<","<<X.n_cols<< std::endl;
+	std::cout<<W.n_rows<<","<<W.n_cols<< std::endl;
+	std::cout<<z.n_rows<<","<<z.n_cols<< std::endl;
 	for(int i=0;i<z.n_rows;i++){
 		for(int j=0;j<z.n_cols;j++){
 			z(i,j)+=b(j);
@@ -30,6 +32,7 @@ arma::mat calculate(arma::mat X, arma::mat W, arma::vec b){
 
 double calculate_loss(arma::mat X, arma::mat W_1, arma::mat W_2, arma::vec b_1, arma::vec b_2){
 	arma::mat z_1 = calculate(X,W_1,b_1);
+	std::cout<<z_1.n_rows << "," << z_1.n_cols << std::endl;
 	arma::mat a_1 = activate_tanh(z_1);
 	std::cout << a_1.n_rows << "," << a_1.n_cols << std::endl;
 	return 0.0;		
