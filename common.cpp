@@ -92,3 +92,66 @@ arma::mat activate_relu(arma::mat A){
 	}
 	return A;
 }
+
+arma::mat element_exp(arma::mat A){
+	for(int i=0;i<A.n_rows;i++){
+		for(int j=0;j<A.n_cols;j++){
+			A(i,j) = exp(A(i,j));
+	}
+	return A;
+}
+
+arma::mat remove_col(arma::mat A,int c){	
+	arma::mat B(A.n_rows,A.n_cols-1);
+	if(c==-1){
+		for(int i=0;i<A.n_rows;i++){
+			for(int j=0;j<A.n_cols-1;j++){
+				B(i,j) = A(i,j);
+			}
+		}
+	} 
+	else{
+		for(int i=0;i<A.n_rows;i++){		
+			int k = 0;
+			for(int j=0;j<A.n_cols-1;j++){
+				if(j!=c){
+					B(i,k) = A(i,j);
+					k++;
+				}
+			}
+		}
+	}
+	return B;
+}
+
+arma::vec find_class(arma::mat A){	
+	arma::vec Y(A.n_rows);
+	for(int i=0;i<A.n_rows;i++){
+		Y(i) = A(i,A.n_cols-1);
+	}
+	return Y;
+}
+
+arma::vec col_sum(arma::mat A,int axis){
+	if(axis==0){ // row_wise addition
+		arma::vec V(A.n_rows);
+		for(int i=0;i<A_n_rows;i++){
+			double sum = 0.0;
+			for(int j=0;j<A.n_cols;j++)
+				sum+=A(i,j);
+			V(i) = sum;
+		}
+		return V;
+	}
+	else{ // column_wise addition
+		arma::vec V(A.n_cols);
+		for(int i=0;i<A.n_cols;i++){
+			double sum = 0.0;
+			for(int j=0;j<A.n_rows;j++)
+				sum+=A(j,i);
+			V(i) = sum;
+		}
+		return V;
+	}
+}
+
