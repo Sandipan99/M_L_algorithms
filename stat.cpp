@@ -78,6 +78,25 @@ arma::vec std_dev(arma::mat A){
 	return B;
 }
 
+double l1_norm(arma::mat A){
+	double sum = 0.0;
+	for(int i=0;i<A.n_rows;i++){
+		for(int j=0;j<A.n_cols;j++)
+			sum+=A(i,j);
+	}
+	return sum;
+}
+
+double l2_norm(arma::mat A){
+	double sum = 0.0;
+	for(int i=0;i<A.n_rows;i++){
+		for(int j=0;j<A.n_cols;j++)
+			sum+=pow(A(i,j),2);
+	}
+	return sum;
+}
+
+
 /*
 double median(std::vector<T> A){
 	

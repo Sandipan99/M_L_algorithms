@@ -16,6 +16,7 @@ arma::vec fill_random(int);
 arma::mat activate_tanh(arma::mat);
 arma::mat activate_relu(arma::mat);
 arma::mat element_exp(arma::mat);
+arma::mat element_neglog(arma::mat);
 arma::mat remove_col(arma::mat,int);
 arma::vec find_class(arma::mat);
 arma::vec col_sum(arma::mat,int);

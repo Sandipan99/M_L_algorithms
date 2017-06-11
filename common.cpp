@@ -101,6 +101,15 @@ arma::mat element_exp(arma::mat A){
 	return A;
 }
 
+arma::mat element_neglog(arma::mat A){
+	for(int i=0;i<A.n_rows;i++){
+		for(int j=0;j<A.n_cols;j++)
+			A(i,j) = -log(A(i,j));
+	}
+	return A;
+}
+
+
 arma::mat remove_col(arma::mat A,int c){	
 	arma::mat B(A.n_rows,A.n_cols-1);
 	if(c==-1){
@@ -156,9 +165,9 @@ arma::vec col_sum(arma::mat A,int axis){
 }
 arma::mat div_op(arma::mat A,arma::vec V){
 	arma::mat B(A.n_rows,A.n_cols);
-	for(int i=0;i<A.n_cols;i++){
-		for(int j=0;j<A.n_rows;j++){
-			B(j,i) = A(j,i)/V(j);
+	for(int i=0;i<A.n_rows;i++){
+		for(int j=0;j<A.n_cols;j++){
+			B(i,j) = A(i,j)/V(i);
 		}
 	}
 	return B;

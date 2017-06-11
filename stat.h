@@ -12,6 +12,8 @@ double std_dev(std::vector<double>);
 
 arma::vec mean(arma::mat);
 arma::vec std_dev(arma::mat);
+double l1_norm(arma::mat);
+double l2_norm(arma::mat);
 //arma::vec median(arma::mat);
 
 
