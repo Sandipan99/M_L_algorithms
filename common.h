@@ -19,4 +19,5 @@ arma::mat element_exp(arma::mat);
 arma::mat remove_col(arma::mat,int);
 arma::vec find_class(arma::mat);
 arma::vec col_sum(arma::mat,int);
+arma::mat div_op(arma::mat,arma::vec);
 #endif

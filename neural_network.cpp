@@ -31,7 +31,12 @@ double calculate_loss(arma::mat X, arma::mat W_1, arma::mat W_2, arma::vec b_1, 
 	arma::mat z_1 = calculate(X,W_1,b_1);
 	arma::mat a_1 = activate_tanh(z_1);
 	arma::mat z_2 = calculate(a_1,W_2,b_2);
-	arma::mat exp_score = element_exp(z_2);	
+	arma::mat exp_score = element_exp(z_2);
+	std::cout<<"exp_score obtained" << std::endl;
+	arma::vec sum = col_sum(exp_score,0);
+	std::cout<<"col sum obtained" << std::endl;
+	arma::mat probs = div_op(exp_score,sum);
+	std::cout<<probs.n_rows<<","<<probs.n_cols<<std::endl; 	
 	return 0.0;		
 }
 

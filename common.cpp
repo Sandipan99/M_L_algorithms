@@ -95,7 +95,7 @@ arma::mat activate_relu(arma::mat A){
 
 arma::mat element_exp(arma::mat A){
 	for(int i=0;i<A.n_rows;i++){
-		for(int j=0;j<A.n_cols;j++){
+		for(int j=0;j<A.n_cols;j++)
 			A(i,j) = exp(A(i,j));
 	}
 	return A;
@@ -135,7 +135,7 @@ arma::vec find_class(arma::mat A){
 arma::vec col_sum(arma::mat A,int axis){
 	if(axis==0){ // row_wise addition
 		arma::vec V(A.n_rows);
-		for(int i=0;i<A_n_rows;i++){
+		for(int i=0;i<A.n_rows;i++){
 			double sum = 0.0;
 			for(int j=0;j<A.n_cols;j++)
 				sum+=A(i,j);
@@ -154,4 +154,12 @@ arma::vec col_sum(arma::mat A,int axis){
 		return V;
 	}
 }
-
+arma::mat div_op(arma::mat A,arma::vec V){
+	arma::mat B(A.n_rows,A.n_cols);
+	for(int i=0;i<A.n_cols;i++){
+		for(int j=0;j<A.n_rows;j++){
+			B(j,i) = A(j,i)/V(j);
+		}
+	}
+	return B;
+}
