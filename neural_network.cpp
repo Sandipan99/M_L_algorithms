@@ -52,7 +52,7 @@ int argmax(arma::mat A){
 			ind = i;
 		}
 	}
-	return i;
+	return ind;
 }
 
 arma::vec element_log(arma::vec A){
@@ -93,7 +93,7 @@ double calculate_loss(arma::mat X, arma::mat W_1, arma::mat W_2, arma::vec b_1, 
 }
 
 double predict(arma::mat W_1, arma::mat W_2, arma::vec b_1, arma::vec b_2, arma::mat x){
-	arma::mat z_1 = calculate(X,W_1,b_1);
+	arma::mat z_1 = calculate(x,W_1,b_1);
 	arma::mat a_1 = activate_tanh(z_1);
 	arma::mat z_2 = calculate(a_1,W_2,b_2);
 	arma::mat exp_score = element_exp(z_2);
@@ -104,35 +104,42 @@ double predict(arma::mat W_1, arma::mat W_2, arma::vec b_1, arma::vec b_2, arma:
 
 double evaluate(arma::mat test,arma::mat W_1,arma::mat W_2,arma::vec b_1,arma::vec b_2,arma::vec y){
 	double test_size = test.n_rows;
+	int correct = 0;
 	for(int i=0;i<test_size;i++){
-		arma::vec(A.n_cols);
+		arma::mat x(1,test.n_cols);
+		for(int j=0;j<test.n_cols;j++)
+			x(0,j) = test(i,j);
+		if(predict(W_1,W_2,b_1,b_2,x)==y(i))
+			correct++;
 	}
+	return correct/test_size;
 }
 
 void build_model(arma::mat X, arma::mat &W_1, arma::mat &W_2, arma::vec &b_1, arma::vec &b_2, arma::vec y ,double epsilon, double lambda){
-	int iterations = 10000;
+	int iterations = 1000;
 	while(iterations>0){
 		arma::mat z_1 = calculate(X,W_1,b_1);
 		arma::mat a_1 = activate_tanh(z_1);
 		arma::mat z_2 = calculate(a_1,W_2,b_2);
 		arma::mat exp_score = element_exp(z_2);
 		arma::vec sum = col_sum(exp_score,0);
-		arma::mat probs = div_op(exp_score,sum);
-		
+		arma::mat probs = div_op(exp_score,sum);		
+
 		arma::mat delta3 = probs;	
 		calculate_delta(delta3,y);
-		arma::mat dW_2 = (a_1.t()) * delta3;
+		arma::mat dW_2 = (a_1.t()) * delta3;  
 		arma::vec db2 = col_sum(delta3,1);
 		calculate_power(a_1);
-		arma::mat delta2 = (delta3 * W_2.t()) * a_1;
+		arma::mat delta2 = (delta3 * W_2.t()) % a_1;
 		arma::mat dW_1 = X.t() * delta2;
 		arma::vec db1 = col_sum(delta2,1);
 
 		dW_2 = dW_2 + mul_scalar(W_2,lambda);
 		dW_1 = dW_1 + mul_scalar(W_1,lambda);
+		
 
 		W_1 = W_1 + mul_scalar(dW_1,-epsilon);
-		W_2 = W_1 + mul_scalar(dW_2,-epsilon);
+		W_2 = W_2 + mul_scalar(dW_2,-epsilon);
 		b_1 = b_1 + mul_scalar(db1,-epsilon);
 		b_2 = b_2 + mul_scalar(db2,-epsilon);
 	
@@ -160,6 +167,5 @@ int main(int argc, char *argv[]){
 	build_model(train,W_1,W_2,b_1,b_2,y,epsilon,lambda);
 	std::cout<< "model learnt" << std::endl;
 	std::cout<<" accuracy:" << evaluate(train,W_1,W_2,b_1,b_2,y);
-	//std::cout << calculate_loss(train,W_1,W_2,b_1,b_2,y,lambda);
 	return 0;
 }
