@@ -172,3 +172,19 @@ arma::mat div_op(arma::mat A,arma::vec V){
 	}
 	return B;
 }
+
+arma::mat mul_scalar(arma::mat A, double x){
+	arma::mat B(A.n_rows,A.n_cols);
+	for(int i=0;i<A.n_rows;i++){
+		for(int j=0;j<A.n_cols;j++)
+			B(i,j) = A(i,j)*x;
+	}
+	return B;
+}
+
+arma::vec mul_scalar(arma::vec A, double x){
+	arma::vec B(A.n_rows);
+	for(int i=0;i<A.n_rows;i++)
+		B(i) = A(i)*x;
+	return B;
+}
