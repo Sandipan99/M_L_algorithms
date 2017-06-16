@@ -149,7 +149,7 @@ void build_model(arma::mat X, arma::mat &W_1, arma::mat &W_2, arma::vec &b_1, ar
 
 int main(int argc, char *argv[]){
 	arma::mat X = read_csv("moon_datasets");
-	std::cout << X.n_rows << " " << X.n_cols << std::endl;
+	//std::cout << X.n_rows << " " << X.n_cols << std::endl;
 	int num_exp = X.n_rows;
 	int input_dim = X.n_cols-1;
 	int output_dim = 2;
