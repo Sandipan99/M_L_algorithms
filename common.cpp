@@ -1,3 +1,6 @@
+/**
+@author Sandipan Sikdar
+**/
 #include "common.h"
 #include<stdlib.h>
 #include<math.h>
