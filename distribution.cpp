@@ -1,7 +1,7 @@
 #include<iostream>
 #include<math.h>
 #include<stdlib.h>
-//#include "distribution.h"
+#include "distribution.h"
 /**
 @author Sandipan Sikdar
 **/
@@ -35,13 +35,3 @@ double* exponential(float lambda, int freq){
 	return data;
 }
 
-
-
-/*
-int main(){
-	double *dist;
-	dist = univariate_normal(0,0.5,100);
-	for(int i=0;i<100;i++)
-		printf("%lf\n",dist[i]);
-	return 0;
-}*/
