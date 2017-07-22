@@ -76,6 +76,24 @@ arma::vec fill_random(int s){
 	return A;
 }
 
+arma::mat fill_zero(int r, int c){
+	arma::mat A(r,c);
+	for(int i=0;i<r;i++){
+		for(int j=0;j<c;j++){
+			A(i,j) = 0.0;	
+		}
+	}
+	return A;
+	
+}
+
+arma::vec fill_zero(int s){
+	arma::vec A(s);
+	for(int i=0;i<s;i++)
+		A(i) = 0.0;
+	return A;
+}
+
 arma::mat activate_tanh(arma::mat A){
 	for(int i=0;i<A.n_rows;i++){
 		for(int j=0;j<A.n_cols;j++){
