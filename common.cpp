@@ -114,6 +114,21 @@ arma::mat activate_relu(arma::mat A){
 	return A;
 }
 
+double sigmoid(double val){
+	double x = 1/(1+exp(-val));
+	return x;
+}
+
+arma::mat activate_sigmoid(arma::mat A){
+	for(int i=0;i<A.n_rows;i++){
+		for(int j=0;j<A.n_cols;j++){
+			A(i,j) = sigmoid(A(i,j));
+		}
+	}
+	return A;
+}
+
+
 arma::mat element_exp(arma::mat A){
 	for(int i=0;i<A.n_rows;i++){
 		for(int j=0;j<A.n_cols;j++)
@@ -209,3 +224,4 @@ arma::vec mul_scalar(arma::vec A, double x){
 		B(i) = A(i)*x;
 	return B;
 }
+
