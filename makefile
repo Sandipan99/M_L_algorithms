@@ -2,7 +2,7 @@ CC = g++ -std=gnu++11
 objects = stat.o common.o distribution.o
 
 naive_bayes : $(objects)
-		 $(CC) metropolis_hastings_sampling.cpp -o met_has_samp $(objects) -O1 -larmadillo 
+		 $(CC) logistic_regression.cpp -o log_reg $(objects) -O1 -larmadillo 
 stat.o : stat.h stat.cpp 
 	$(CC) -c stat.cpp
 

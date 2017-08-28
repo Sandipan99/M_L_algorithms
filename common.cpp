@@ -45,6 +45,10 @@ void display(arma::mat A){
 	}
 }
 
+void display_dimension(arma::mat A){
+	std::cout<< A.n_rows << "," << A.n_cols << std::endl;
+}
+
 bool present(std::vector<int> vec, int a){
 	std::vector<int>::iterator it;
 	it = find(vec.begin(),vec.end(),a);
