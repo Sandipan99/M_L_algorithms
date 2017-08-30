@@ -229,3 +229,38 @@ arma::vec mul_scalar(arma::vec A, double x){
 	return B;
 }
 
+arma::mat shuffle(arma::mat A){
+	int s_a,s_b;
+	double temp;
+	int i = (int)(0.5*A.n_rows);
+	int limit = A.n_rows;
+	while(i>0){
+		s_a = rand()%limit;
+		s_b = rand()%limit;
+		while(s_b==s_a)
+			s_b = rand()%limit;
+		for(int k=0;k<A.n_cols;k++){
+			temp = A(s_a,k);
+			A(s_a,k) = A(s_b,k);
+			A(s_b,k) = temp;
+		}	
+		i--;	
+	}
+	return A;	
+}
+
+int max(int a, int b){
+	if(a>b)
+		return a;
+	return b;
+}
+
+double vector_dot(arma::vec A, arma::vec B){
+	int x = A.n_rows;
+	int y = A.n_cols;
+	double res = 0.0;
+	for(int i=0;i<max(x,y);i++)
+		res+=A(i)*B(i);
+	return res;	
+}
+
