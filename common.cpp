@@ -264,3 +264,20 @@ double vector_dot(arma::vec A, arma::vec B){
 	return res;	
 }
 
+arma::mat pairwise_distance(arma::mat A){
+	int r = A.n_rows;
+	int c = A.n_cols;
+	double sum = 0.0;
+	arma::mat similarity(r,r);
+	for(int i=0;i<r-1;i++){
+		for(int j=i+1;j<r;j++){
+			sum = 0.0;
+			for(int k=0;k<c;k++)
+				sum+=pow(A(i,k)-A(j,k),2)
+			sum = sqrt(sum);
+			similarity(i,j) = sum;
+			similarity(j,i) = sum;	
+		}
+	}
+	return similarity;	
+}

@@ -29,5 +29,6 @@ arma::mat div_op(arma::mat,arma::vec);
 arma::mat mul_scalar(arma::mat,double);
 arma::vec mul_scalar(arma::vec,double);
 arma::mat shuffle(arma::mat);
-double vector_dot(arma::vec,arma::vec);	
+double vector_dot(arma::vec,arma::vec);
+arma::mat pairwise_distance(arma::mat);	
 #endif
